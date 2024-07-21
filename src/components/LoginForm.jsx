@@ -1,19 +1,28 @@
 import * as React from 'react'
 
 function LoginForm({onSubmit, buttonText}) {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    
+        const formData = new FormData(event.target)
+        const formEntries = Object.fromEntries(formData)
+    
+        onSubmit(formEntries)
+    }
+
     return (
-        <form type="submit" onSubmit={onSubmit}>
+        <form type="submit" onSubmit={handleSubmit}>
             <div>
-                <label>Username</label>
-                <input id="username" name="username" />
+                <label htmlFor="username">Username</label>
+                <input type="text" id="username" name="username" />
             </div>
 
             <div>
-                <label>Password</label>
-                <input id="password" name="password" />
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" name="password" />
             </div>
 
-            <button>{buttonText}</button>
+            <button type="submit">{buttonText}</button>
         </form>
     )
 }

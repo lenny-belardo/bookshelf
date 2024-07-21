@@ -8,13 +8,12 @@ import LoginForm from './components/LoginForm'
 function App() {
   const [openModal, setOpenModal] = React.useState('none')
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  function login(formData) {
+    console.log('login ', formData)
+  }
 
-    const formData = new FormData(event.target)
-    const fromEntries = Object.fromEntries(formData)
-
-    console.log('login ', fromEntries);
+  function register(formData) {
+    console.log('register ', formData)
   }
 
   return (
@@ -33,7 +32,7 @@ function App() {
         </div>
         <h3>Login</h3>
 
-        <LoginForm onSubmit={handleSubmit} buttonText="Login" />
+        <LoginForm onSubmit={login} buttonText="Login" />
       </Dialog>
       <Dialog aria-label="Registration form" isOpen={openModal === 'register'}>
         <div>
@@ -41,7 +40,7 @@ function App() {
         </div>
         <h3>Register</h3>
 
-        <LoginForm onSubmit={handleSubmit} buttonText="Register" />
+        <LoginForm onSubmit={register} buttonText="Register" />
       </Dialog>
     </div>
   )
