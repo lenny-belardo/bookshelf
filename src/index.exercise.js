@@ -1,9 +1,34 @@
-// 🐨 you'll need to import react and createRoot from react-dom up here
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import {Logo} from './components/logo'
 
-// 🐨 you'll also need to import the Logo component from './components/logo'
+function onButtonClick(buttonName) {
+    alert(`${buttonName} button was clicked!`)
+}
 
-// 🐨 create an App component here and render the logo, the title ("Bookshelf"), a login button, and a register button.
-// 🐨 for fun, you can add event handlers for both buttons to alert that the button was clicked
+function App() {
+    return (
+        <div>
+            <Logo />
 
-// 🐨 use createRoot to render the <App /> to the root element
-// 💰 find the root element with: document.getElementById('root')
+            <h2>Bookshelf</h2>
+
+            <div>
+                <button onClick={() => onButtonClick('Login')}>
+                    Login
+                </button>
+            </div>
+
+            <div>
+                <button onClick={() => onButtonClick('Register')}>
+                    Register
+                </button>
+            </div>
+        </div>
+    )
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+root.render(<App />)
+
