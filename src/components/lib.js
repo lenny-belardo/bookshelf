@@ -1,6 +1,9 @@
-export * from './lib.final'
+// export * from './lib.final'
 
-// export * from './lib.exercise'
+// eslint-disable-next-line
+import * as React from 'react'
+
+export * from './lib.exercise'
 
 // 💯 use the emotion macro
 // export * from './lib.extra-1'

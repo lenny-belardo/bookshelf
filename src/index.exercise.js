@@ -1,19 +1,13 @@
-// 🐨 make sure to add the comment and import jsx from @emotion/core
-// up here so you can use the css prop
+/** @jsx jsx **/
+import {jsx} from '@emotion/core'
+import 'bootstrap/dist/css/bootstrap-reboot.css'
 
-// 🐨 let's get a solid reset of global styles so everything looks a bit better
-// In this project we're using bootstrap-reboot which you can import from
-// bootstrap/dist/css/bootstrap-reboot.css
-// 🦉 Note: you can definitely use regular styles to style React apps
-// and using any modern toolchain will allow you to simply import the CSS file
-// but CSS-in-JS is generally easier to maintain.
 import '@reach/dialog/styles.css'
 import * as React from 'react'
 import {createRoot} from 'react-dom/client'
-// 🐨 you'll need to import some new components that you'll be creating
-// in this file
 // import {Button, Input, FormGroup} from './components/lib'
 import {Modal, ModalContents, ModalOpenButton} from './components/modal'
+import {Button} from './components/lib'
 import {Logo} from './components/logo'
 
 function LoginForm({onSubmit, submitButton}) {
@@ -86,23 +80,23 @@ function App() {
       <div>
         <Modal>
           <ModalOpenButton>
-            <button variant="primary">Login</button>
+            <Button variant="primary">Login</Button>
           </ModalOpenButton>
           <ModalContents aria-label="Login form" title="Login">
             <LoginForm
               onSubmit={login}
-              submitButton={<button variant="primary">Login</button>}
+              submitButton={<Button variant="primary">Login</Button>}
             />
           </ModalContents>
         </Modal>
         <Modal>
           <ModalOpenButton>
-            <button variant="secondary">Register</button>
+            <Button variant="secondary">Register</Button>
           </ModalOpenButton>
           <ModalContents aria-label="Registration form" title="Register">
             <LoginForm
               onSubmit={register}
-              submitButton={<button variant="secondary">Register</button>}
+              submitButton={<Button variant="secondary">Register</Button>}
             />
           </ModalContents>
         </Modal>

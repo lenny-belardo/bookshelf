@@ -12,23 +12,34 @@ import {Dialog as ReachDialog} from '@reach/dialog'
 // do in the final example. Just make sure you understand how to create the
 // styled component and accept a prop to change which styles apply.
 
+const BUTTON_TYPE = {
+    PRIMARY: 'primary',
+    SECONDARY: 'secondary'
+}
+
+const buttonStyles = {
+  [BUTTON_TYPE.PRIMARY]: {      
+    background: '#3f51b5',
+    color: 'white'
+  },
+  [BUTTON_TYPE.SECONDARY]: {
+    background: '#f1f2f7',
+    color: '#434449'
+  }
+}
+
+const Button = styled.button(props => {
+  return {
+    padding: '10px 15px',
+    border: '0',
+    lineHeight: '1',
+    borderRadius: '3px',
+    ...buttonStyles[props.variant]
+  }
+})
+
 // 🐨 Feel free to create as many reusable styled components here as you'd like
 // 💰 in my finished version I have: Button, Input, CircleButton, Dialog, FormGroup
-
-// 🎨 here are a bunch of styles you can copy/paste if you want
-// Button:
-//   padding: '10px 15px',
-//   border: '0',
-//   lineHeight: '1',
-//   borderRadius: '3px',
-
-// Button variant="primary" (in addition to the above styles)
-//   background: '#3f51b5',
-//   color: 'white',
-
-// Button variant="secondary" (in addition to the above styles)
-//   background: '#f1f2f7',
-//   color: '#434449',
 
 // Input
 //   borderRadius: '3px',
@@ -68,4 +79,4 @@ const Dialog = styled(ReachDialog)({
   },
 })
 
-export {CircleButton, Dialog}
+export {Button, CircleButton, Dialog}
