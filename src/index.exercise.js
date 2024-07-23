@@ -1,13 +1,11 @@
-/** @jsx jsx **/
+/** @jsx jsx */
 import {jsx} from '@emotion/core'
-import 'bootstrap/dist/css/bootstrap-reboot.css'
-
-import '@reach/dialog/styles.css'
 import * as React from 'react'
+import 'bootstrap/dist/css/bootstrap-reboot.css'
+import '@reach/dialog/styles.css'
 import {createRoot} from 'react-dom/client'
-// import {Button, Input, FormGroup} from './components/lib'
 import {Modal, ModalContents, ModalOpenButton} from './components/modal'
-import {Button} from './components/lib'
+import {Button, Input, FormGroup} from './components/lib'
 import {Logo} from './components/logo'
 
 function LoginForm({onSubmit, submitButton}) {
@@ -21,28 +19,28 @@ function LoginForm({onSubmit, submitButton}) {
     })
   }
 
-  // 🐨 this <form> could use a css prop
-  // 🎨
-  //    display: 'flex',
-  //    flexDirection: 'column',
-  //    alignItems: 'stretch',
-  //    '> div': {
-  //      margin: '10px auto',
-  //      width: '100%',
-  //      maxWidth: '300px',
-  //    },
   return (
-    <form onSubmit={handleSubmit}>
-      {/* 🐨 these div elements could be a FormGroup you create in components/lib */}
-      {/* 🐨 and the inputs elements could be custom styled Input components too */}
-      <div>
+    <form
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        '> div': {
+          margin: '10px auto',
+          width: '100%',
+          maxWidth: '300px',
+        }
+      }}
+      onSubmit={handleSubmit}
+    >
+      <FormGroup>
         <label htmlFor="username">Username</label>
-        <input id="username" />
-      </div>
-      <div>
+        <Input id="username" />
+      </FormGroup>
+      <FormGroup>
         <label htmlFor="password">Password</label>
-        <input id="password" type="password" />
-      </div>
+        <Input id="password" type="password" />
+      </FormGroup>
       <div>{React.cloneElement(submitButton, {type: 'submit'})}</div>
     </form>
   )
