@@ -55,27 +55,26 @@ function App() {
     console.log('register', formData)
   }
 
-  // 🐨 this div could use a css prop to get its children rendered nicer
-  // 🎨
-  //    display: 'flex',
-  //    flexDirection: 'column',
-  //    alignItems: 'center',
-  //    justifyContent: 'center',
-  //    width: '100%',
-  //    height: '100vh',
   return (
-    <div>
+    <div
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh'
+      }}
+    >
       <Logo width="80" height="80" />
       <h1>Bookshelf</h1>
-      {/*
-        🐨 the two buttons are too close, let's space them out
-          🎨 apply this to the div right below
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-            gridGap: '0.75rem',
-      */}
-      {/* 🐨 And make sure to use the new Button component for all these buttons */}
-      <div>
+      <div
+        css={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gridGap: '0.75rem'
+        }}
+      >
         <Modal>
           <ModalOpenButton>
             <Button variant="primary">Login</Button>
