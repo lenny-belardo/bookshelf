@@ -14,7 +14,7 @@ const spin = keyframes({
 })
 
 const Spinner = styled(FaSpinner)({
-  animationName: `${spin} 1s ease infinite`
+  animation: `${spin} 1s ease infinite`
 })
 
 const BUTTON_TYPE = {
