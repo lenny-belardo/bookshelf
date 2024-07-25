@@ -17,6 +17,10 @@ const Spinner = styled(FaSpinner)({
   animation: `${spin} 1s ease infinite`
 })
 
+Spinner.defaultProps = {
+  'aria-label': 'loading'
+}
+
 const BUTTON_TYPE = {
     PRIMARY: 'primary',
     SECONDARY: 'secondary'
