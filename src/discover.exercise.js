@@ -3,8 +3,9 @@ import {jsx} from '@emotion/core'
 import React from 'react'
 
 import './bootstrap'
+import * as colors from './styles/colors'
 import Tooltip from '@reach/tooltip'
-import {FaSearch} from 'react-icons/fa'
+import {FaSearch, FaTimes} from 'react-icons/fa'
 import {Input, BookListUL, Spinner} from './components/lib'
 import {BookRow} from './components/book-row'
 import {client} from './utils/api-client'
@@ -20,6 +21,7 @@ function DiscoverBooksScreen() {
   const [data, setData] = React.useState(null)
   const [query, setQuery] = React.useState('')
   const [queried, setQueried] = React.useState(false)
+  const [error, setError] = React.useState(null)
 
   // 🐨 Add a useEffect callback here for making the request with the
   // client and updating the status and data.
@@ -38,11 +40,15 @@ function DiscoverBooksScreen() {
     client(`books?query=${encodeURIComponent(query)}`).then((data) => {
       setStatus('success')
       setData(data)
+    }, (errorData) => {
+      setStatus('error')
+      setError(errorData)
     })
   }, [queried, query])
 
   const isLoading = status === 'loading'
   const isSuccess = status === 'success'
+  const isError = status === 'error'
 
   function handleSearchSubmit(event) {
     event.preventDefault()
@@ -73,11 +79,20 @@ function DiscoverBooksScreen() {
                 background: 'transparent',
               }}
             >
-              {isLoading ? <Spinner /> : <FaSearch aria-label="search" />}
+              {isLoading ? <Spinner /> : isError ? <FaTimes aria-label="error" css={{color: colors.danger}} /> : <FaSearch aria-label="search" />}
             </button>
           </label>
         </Tooltip>
       </form>
+
+      {
+        isError ? (
+          <div css={{color: colors.danger}}>
+            <p>There was an error:</p>
+            <pre>{error.message}</pre>
+          </div>
+        ) : null
+      }
 
       {isSuccess ? (
         data?.books?.length ? (
