@@ -3,12 +3,12 @@ import {jsx} from '@emotion/core'
 
 import * as React from 'react'
 import * as auth from 'auth-provider'
+import {FullPageSpinner} from './components/lib'
+import * as colors from './styles/colors'
 import {client} from './utils/api-client'
+import {useAsync} from './utils/hooks'
 import {AuthenticatedApp} from './authenticated-app'
 import {UnauthenticatedApp} from './unauthenticated-app'
-import {useAsync} from './utils/hooks'
-import {FullPageSpinner} from 'components/lib'
-import * as colors from 'styles/colors'
 
 async function getUser() {
   let user = null
@@ -24,31 +24,29 @@ async function getUser() {
 
 function App() {
   const {
-    data,
-    isIdle,
+    data: user,
+    error,
     isLoading,
+    isIdle,
     isError,
     isSuccess,
-    error,
     run,
-    setData
+    setData,
   } = useAsync()
 
   React.useEffect(() => {
     run(getUser())
   }, [run])
 
-  const login = form => auth.login(form).then(u => setData(u))
-  const register = form => auth.register(form).then(u => setData(u))
+  const login = form => auth.login(form).then(user => setData(user))
+  const register = form => auth.register(form).then(user => setData(user))
   const logout = () => {
     auth.logout()
     setData(null)
   }
 
   if (isLoading || isIdle) {
-    return (
-      <FullPageSpinner />
-    )
+    return <FullPageSpinner />
   }
 
   if (isError) {
@@ -70,8 +68,8 @@ function App() {
   }
 
   if (isSuccess) {
-    return data ? (
-      <AuthenticatedApp user={data} logout={logout} />
+    return user ? (
+      <AuthenticatedApp user={user} logout={logout} />
     ) : (
       <UnauthenticatedApp login={login} register={register} />
     )
