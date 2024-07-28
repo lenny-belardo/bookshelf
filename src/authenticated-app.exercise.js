@@ -2,12 +2,12 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
-import {Link, Route, Routes} from 'react-router-dom'
+import {Routes, Route, Link} from 'react-router-dom'
 import {Button} from './components/lib'
 import * as mq from './styles/media-queries'
 import * as colors from './styles/colors'
-import {BookScreen} from './screens/book'
 import {DiscoverBooksScreen} from './screens/discover'
+import {BookScreen} from './screens/book'
 import {NotFoundScreen} from './screens/not-found'
 
 function AuthenticatedApp({user, logout}) {
@@ -99,10 +99,6 @@ function Nav() {
         }}
       >
         <li>
-          {/*
-              🐨 Once the NavLink has been updated to use a Router Link,
-                change from the href prop to a "to" prop
-          */}
           <NavLink to="/discover">Discover</NavLink>
         </li>
       </ul>
@@ -112,19 +108,12 @@ function Nav() {
 
 function AppRoutes({user}) {
   return (
-    <div>
-      <Routes>
-        <Route path="/discover" element={<DiscoverBooksScreen user={user} />}/>
-        <Route path="/book/:bookId" element={<BookScreen user={user} />}/>
-        <Route path="*" element={<NotFoundScreen />}/>
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/discover" element={<DiscoverBooksScreen user={user} />} />
+      <Route path="/book/:bookId" element={<BookScreen user={user} />} />
+      <Route path="*" element={<NotFoundScreen />} />
+    </Routes>
   )
 }
 
 export {AuthenticatedApp}
-
-/*
-eslint
-  jsx-a11y/anchor-has-content: "off",
-*/
