@@ -54,11 +54,7 @@ function StatusButtons({user, book}) {
       client('list-items', {token: user.token}).then(data => data.listItems)
   })
 
-  console.log("listItems ", listItems)
-
   const listItem = listItems?.find((item) => item.bookId === book.id) ?? null
-  console.log("listItem ", book, listItem)
-
 
   const [update] = useMutation((updates) => client(`list-items/${updates.id}`, {token: user.token, method: 'PUT', data: updates}), {
     onSettled: () => queryCache.invalidateQueries('list-items')
