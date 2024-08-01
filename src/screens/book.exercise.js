@@ -126,7 +126,7 @@ function ListItemTimeframe({listItem}) {
 
 function NotesTextarea({listItem, user}) {
   const [mutate] = useMutation(
-    ((updates) => client(`list-items/${updates.listItemId}`, {token: user.token, method: 'PUT', data: updates})),
+    ((updates) => client(`list-items/${updates.id}`, {token: user.token, method: 'PUT', data: updates})),
     {onSettled: () => queryCache.invalidateQueries('list-items')}
   )
   // 🐨 call useMutation here
