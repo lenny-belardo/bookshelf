@@ -8,30 +8,17 @@ import Tooltip from '@reach/tooltip'
 import {useParams} from 'react-router-dom'
 import {useQuery, useMutation, queryCache} from 'react-query'
 import {client} from 'utils/api-client'
+import {useBook} from 'utils/books.exercise'
 import {formatDate} from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import {Textarea} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
-import bookPlaceholderSvg from 'assets/book-placeholder.svg'
-
-const loadingBook = {
-  title: 'Loading...',
-  author: 'loading...',
-  coverImageUrl: bookPlaceholderSvg,
-  publisher: 'Loading Publishing',
-  synopsis: 'Loading...',
-  loadingBook: true,
-}
 
 function BookScreen({user}) {
   const {bookId} = useParams()
-  const {data: book = loadingBook} = useQuery({
-    queryKey: ['book', {bookId}],
-    queryFn: () =>
-      client(`books/${bookId}`, {token: user.token}).then(data => data.book),
-  })
+  const book = useBook(bookId, user)
 
   const {data: listItems} = useQuery({
     queryKey: 'list-items',
