@@ -20,10 +20,14 @@ const visuallyHiddenCSS = {
 
 function Rating({listItem, user}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-
-  const [update] = useMutation((updates) => 
-    (client(`list-items/${updates.id}`, {token: user.token, method: 'PUT', data: updates})),
-    {onSettled: () => queryCache.invalidateQueries('list-items')}
+  const [update] = useMutation(
+    updates =>
+      client(`list-items/${updates.id}`, {
+        method: 'PUT',
+        data: updates,
+        token: user.token,
+      }),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
   )
 
   React.useEffect(() => {

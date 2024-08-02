@@ -49,24 +49,31 @@ function TooltipButton({label, highlight, onClick, icon, ...rest}) {
 
 function StatusButtons({user, book}) {
   const {data: listItems} = useQuery({
-    queryKey: ['list-items'],
+    queryKey: 'list-items',
     queryFn: () =>
-      client('list-items', {token: user.token}).then(data => data.listItems)
+      client(`list-items`, {token: user.token}).then(data => data.listItems),
   })
+  const listItem = listItems?.find(li => li.bookId === book.id) ?? null
 
-  const listItem = listItems?.find((item) => item.bookId === book.id) ?? null
+  const [update] = useMutation(
+    updates =>
+      client(`list-items/${updates.id}`, {
+        method: 'PUT',
+        data: updates,
+        token: user.token,
+      }),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
 
-  const [update] = useMutation((updates) => client(`list-items/${updates.id}`, {token: user.token, method: 'PUT', data: updates}), {
-    onSettled: () => queryCache.invalidateQueries('list-items')
-  })
+  const [remove] = useMutation(
+    ({id}) => client(`list-items/${id}`, {method: 'DELETE', token: user.token}),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
 
-  const [remove] = useMutation(({bookId}) => client(`list-items/${bookId}`, {token: user.token, method: 'DELETE'}), {
-    onSettled: () => queryCache.invalidateQueries('list-items')
-  })
-
-  const [create] = useMutation(({bookId}) => client('list-items', {token: user.token, method: 'POST', data: {bookId}}), {
-    onSettled: () => queryCache.invalidateQueries('list-items')
-  })
+  const [create] = useMutation(
+    ({bookId}) => client(`list-items`, {data: {bookId}, token: user.token}),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
 
   return (
     <React.Fragment>

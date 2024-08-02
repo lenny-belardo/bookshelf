@@ -12,11 +12,11 @@ function ListItemList({
   noListItems,
   noFilteredListItems,
 }) {
-  const {data:listItems} = useQuery({
+  const {data: listItems} = useQuery({
     queryKey: 'list-items',
-    queryFn: () => client('list-items', {token: user.token}).then(data => data.listItems)
+    queryFn: () =>
+      client(`list-items`, {token: user.token}).then(data => data.listItems),
   })
-
   const filteredListItems = listItems?.filter(filterListItems)
 
   if (!listItems?.length) {
