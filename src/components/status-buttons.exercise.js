@@ -21,7 +21,7 @@ import {useAsync} from 'utils/hooks'
 import {CircleButton, Spinner} from './lib'
 
 function TooltipButton({label, highlight, onClick, icon, ...rest}) {
-  const {isLoading, isError, error, reset, run} = useAsync()
+  const {isLoading, isError, error, run, reset} = useAsync()
 
   function handleClick() {
     if (isError) {

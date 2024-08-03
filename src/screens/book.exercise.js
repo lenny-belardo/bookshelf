@@ -11,10 +11,9 @@ import {useListItem, useUpdateListItem} from 'utils/list-items'
 import {formatDate} from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
-import {Textarea} from 'components/lib'
+import {Textarea, ErrorMessage} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
-import {ErrorMessage} from 'components/lib'
 
 function BookScreen({user}) {
   const {bookId} = useParams()
