@@ -15,13 +15,10 @@ import {Spinner, Textarea, ErrorMessage} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
 
-// 💣 remove the user prop
-function BookScreen({user}) {
+function BookScreen() {
   const {bookId} = useParams()
-  // 💣 remove the user argument
-  const book = useBook(bookId, user)
-  // 💣 remove the user argument
-  const listItem = useListItem(bookId, user)
+  const book = useBook(bookId)
+  const listItem = useListItem(bookId)
 
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
@@ -65,21 +62,13 @@ function BookScreen({user}) {
               }}
             >
               {book.loadingBook ? null : (
-                <StatusButtons
-                  // 💣 remove the user prop here
-                  user={user}
-                  book={book}
-                />
+                <StatusButtons book={book} />
               )}
             </div>
           </div>
           <div css={{marginTop: 10, height: 46}}>
             {listItem?.finishDate ? (
-              <Rating
-                // 💣 remove the user prop here
-                user={user}
-                listItem={listItem}
-              />
+              <Rating listItem={listItem} />
             ) : null}
             {listItem ? <ListItemTimeframe listItem={listItem} /> : null}
           </div>
@@ -88,11 +77,7 @@ function BookScreen({user}) {
         </div>
       </div>
       {!book.loadingBook && listItem ? (
-        <NotesTextarea
-          // 💣 remove the user prop here
-          user={user}
-          listItem={listItem}
-        />
+        <NotesTextarea listItem={listItem} />
       ) : null}
     </div>
   )
@@ -116,10 +101,8 @@ function ListItemTimeframe({listItem}) {
   )
 }
 
-// 💣 remove the user prop here
-function NotesTextarea({listItem, user}) {
-  // 💣 remove the user argument here
-  const [mutate, {error, isError, isLoading}] = useUpdateListItem(user)
+function NotesTextarea({listItem}) {
+  const [mutate, {error, isError, isLoading}] = useUpdateListItem()
   const debouncedMutate = React.useMemo(() => debounceFn(mutate, {wait: 300}), [
     mutate,
   ])
