@@ -61,15 +61,11 @@ function BookScreen() {
                 minHeight: 100,
               }}
             >
-              {book.loadingBook ? null : (
-                <StatusButtons book={book} />
-              )}
+              {book.loadingBook ? null : <StatusButtons book={book} />}
             </div>
           </div>
           <div css={{marginTop: 10, height: 46}}>
-            {listItem?.finishDate ? (
-              <Rating listItem={listItem} />
-            ) : null}
+            {listItem?.finishDate ? <Rating listItem={listItem} /> : null}
             {listItem ? <ListItemTimeframe listItem={listItem} /> : null}
           </div>
           <br />

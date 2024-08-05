@@ -17,6 +17,7 @@ const visuallyHiddenCSS = {
   position: 'absolute',
   width: '1px',
 }
+
 function Rating({listItem}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
   const [update, {error, isError}] = useUpdateListItem()

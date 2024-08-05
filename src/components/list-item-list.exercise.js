@@ -5,11 +5,7 @@ import {useListItems} from 'utils/list-items'
 import {BookListUL} from './lib'
 import {BookRow} from './book-row'
 
-function ListItemList({
-  filterListItems,
-  noListItems,
-  noFilteredListItems,
-}) {
+function ListItemList({filterListItems, noListItems, noFilteredListItems}) {
   const listItems = useListItems()
 
   const filteredListItems = listItems.filter(filterListItems)

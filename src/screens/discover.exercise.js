@@ -13,7 +13,7 @@ function DiscoverBooksScreen() {
   const [query, setQuery] = React.useState('')
   const [queried, setQueried] = React.useState(false)
   const {books, error, status} = useBookSearch(query)
-  const {refetchBookSearchQuery} = useRefetchBookSearchQuery()
+  const refetchBookSearchQuery = useRefetchBookSearchQuery()
 
   React.useEffect(() => {
     return () => refetchBookSearchQuery()
@@ -90,10 +90,7 @@ function DiscoverBooksScreen() {
           <BookListUL css={{marginTop: 20}}>
             {books.map(book => (
               <li key={book.id} aria-label={book.title}>
-                <BookRow
-                  key={book.id}
-                  book={book}
-                />
+                <BookRow key={book.id} book={book} />
               </li>
             ))}
           </BookListUL>
