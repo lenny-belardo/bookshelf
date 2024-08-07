@@ -1,5 +1,5 @@
-import { formatDate } from "utils/misc"
+import {formatDate} from '../misc'
 
-test('should return the formatted date', () => {
-    expect(formatDate(new Date('10 March'))).toEqual('Mar 01')
+test('formatDate formats the date to look nice', () => {
+  expect(formatDate(new Date('October 18, 1988'))).toBe('Oct 88')
 })
