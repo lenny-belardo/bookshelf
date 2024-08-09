@@ -98,3 +98,16 @@ test('the user is automatically logged out on 401', async () => {
   expect(queryCache.clear).toHaveBeenCalledTimes(1)
   expect(auth.logout).toHaveBeenCalledTimes(1)
 })
+
+test('the call is rejected on an unsuccessful status code', async () => {
+  const endpoint = 'test-endpoint'
+  const mockResult = {message: 'Server error!'}
+
+  server.use(
+    rest.get(`${apiURL}/${endpoint}`, async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json(mockResult))
+    }),
+  )
+
+  await expect(client(endpoint)).rejects.toEqual(mockResult)
+})
