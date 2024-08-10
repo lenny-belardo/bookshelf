@@ -20,6 +20,14 @@ function deferred() {
 // await promise
 // do stuff/make assertions you want to after the promise has resolved
 
+beforeEach(() => {
+    jest.spyOn(console, 'error')
+})
+
+afterEach(() => {
+    console.error.mockRestore()
+})
+
 const defaultState = {
     data: null,
     error: null,
@@ -172,7 +180,26 @@ test('can set the error', () => {
     })
 })
 
-test.todo('No state updates happen if the component is unmounted while pending')
+test('No state updates happen if the component is unmounted while pending', async () => {
+    const {promise, resolve} = deferred()
+    const {result, unmount} = renderHook(useAsync)
+
+    expect(result.current).toEqual(defaultState)
+
+    let p = null
+    act(() => {
+        p = result.current.run(promise)
+    })
+
+    unmount()
+
+    await act(async() => {
+        resolve()
+        await p
+    })
+
+    expect(console.error).not.toHaveBeenCalled()
+})
 // 💰 const {result, unmount} = renderHook(...)
 // 🐨 ensure that console.error is not called (React will call console.error if updates happen when unmounted)
 
