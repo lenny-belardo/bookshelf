@@ -112,13 +112,23 @@ test('calling run with a promise which rejects', async () => {
 
     expect(result.current).toEqual(defaultState)
 })
-// 🐨 this will be very similar to the previous test, except you'll reject the
-// promise instead and assert on the error state.
-// 💰 to avoid the promise actually failing your test, you can catch
-//    the promise returned from `run` with `.catch(() => {})`
 
-test.todo('can specify an initial state')
-// 💰 useAsync(customInitialState)
+test('can specify an initial state', () => {
+    const mockedData = Symbol('resolved data')
+    const customInitialState = {
+        status: 'resolved',
+        data: mockedData
+    }
+    const {result} = renderHook(() => useAsync(customInitialState))
+
+    expect(result.current).toEqual({
+        ...defaultState,
+        data: mockedData,
+        status: 'resolved',
+        isIdle: false,
+        isSuccess: true
+    })
+})
 
 test.todo('can set the data')
 // 💰 result.current.setData('whatever you want')
