@@ -72,7 +72,46 @@ test('calling run with a promise which resolves', async () => {
     expect(result.current).toEqual(defaultState)
 })
 
-test.todo('calling run with a promise which rejects')
+test('calling run with a promise which rejects', async () => {
+    const {promise, reject} = deferred()
+    const {result} = renderHook(useAsync)
+
+    expect(result.current).toEqual(defaultState)
+
+    let p = null;
+    act(() => {
+        p = result.current.run(promise)
+    })
+
+    expect(result.current).toEqual({
+        ...defaultState,
+        isIdle: false,
+        isLoading: true,
+        status: 'pending'
+    })
+
+    const rejectedState = Symbol('rejected state')
+    await act(async() => {
+        reject(rejectedState)
+        await p.catch(() => {
+            // ignore error
+        })
+    })
+
+    expect(result.current).toEqual({
+        ...defaultState,
+        error: rejectedState,
+        isError: true,
+        isIdle: false,
+        isLoading: false,
+        isSuccess: false,
+        status: 'rejected'
+    })
+
+    await act(() => result.current.reset())
+
+    expect(result.current).toEqual(defaultState)
+})
 // 🐨 this will be very similar to the previous test, except you'll reject the
 // promise instead and assert on the error state.
 // 💰 to avoid the promise actually failing your test, you can catch
