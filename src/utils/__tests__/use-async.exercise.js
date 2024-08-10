@@ -151,8 +151,26 @@ test('can set the data', () => {
     })
 })
 
-test.todo('can set the error')
-// 💰 result.current.setError('whatever you want')
+test('can set the error', () => {
+    const mockedError = Symbol('new data')
+    const {result} = renderHook(useAsync)
+
+    act(() => {result.current.setError(mockedError)})
+
+    expect(result.current).toEqual({
+        data: null,
+        error: mockedError,
+        isError: true,
+        isIdle: false,
+        isLoading: false,
+        isSuccess: false,
+        reset: expect.any(Function),
+        run: expect.any(Function),
+        setData: expect.any(Function),
+        setError: expect.any(Function),
+        status: 'rejected'
+    })
+})
 
 test.todo('No state updates happen if the component is unmounted while pending')
 // 💰 const {result, unmount} = renderHook(...)
