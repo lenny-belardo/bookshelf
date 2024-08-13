@@ -1,7 +1,9 @@
 import * as React from 'react'
 import {render, screen, waitForElementToBeRemoved} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import {queryCache} from 'react-query'
 import * as auth from 'auth-provider'
+import {formatDate} from 'utils/misc'
 import {buildUser, buildBook} from 'test/generate'
 import * as usersDB from 'test/data/users'
 import * as booksDB from 'test/data/books'
@@ -20,7 +22,7 @@ afterEach(async () => {
   ])
 })
 
-test('renders all the book information', async () => {
+test('can create a list item for the book', async () => {
   const user = buildUser()
   await usersDB.create(user)
   const authUser = await usersDB.authenticate(user)
@@ -61,4 +63,42 @@ test('renders all the book information', async () => {
   ).not.toBeInTheDocument()
   expect(screen.queryByRole('radio', {name: /star/i})).not.toBeInTheDocument()
   expect(screen.queryByLabelText(/start date/i)).not.toBeInTheDocument()
+})
+
+test('renders all the book information', async () => {
+  const user = buildUser()
+  await usersDB.create(user)
+  const authUser = await usersDB.authenticate(user)
+  window.localStorage.setItem(auth.localStorageKey, authUser.token)
+
+  const book = await booksDB.create(buildBook())
+  const route = `/book/${book.id}`
+  window.history.pushState({}, 'Test page', route)
+
+  render(<App />, {wrapper: AppProviders})
+
+  await waitForElementToBeRemoved(() => [
+    ...screen.queryAllByLabelText(/loading/i),
+    ...screen.queryAllByText(/loading/i),
+  ])
+
+  const addToListButton = screen.getByRole('button', {name: /Add to list/i});
+  await userEvent.click(addToListButton)
+  expect(addToListButton).toBeDisabled()
+
+  await waitForElementToBeRemoved(() => [
+    ...screen.queryAllByLabelText(/loading/i),
+    ...screen.queryAllByText(/loading/i),
+  ])
+
+  expect(screen.getByRole('button', {name: /Mark as read/i})).toBeInTheDocument()
+  expect(screen.getByRole('button', {name: /Remove from list/i})).toBeInTheDocument()
+  expect(screen.getByRole('textbox', {name: /Notes/i})).toBeInTheDocument()
+
+  const startDateNow = screen.getByLabelText(/Start date/i)
+  expect(startDateNow).toHaveTextContent(formatDate(new Date()))
+
+  expect(screen.queryByRole('button', {name: /Add to list/i})).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', {name: /Mark as unread/i})).not.toBeInTheDocument()
+  expect(screen.queryByRole('radio', {name: /Star/i})).not.toBeInTheDocument()
 })
