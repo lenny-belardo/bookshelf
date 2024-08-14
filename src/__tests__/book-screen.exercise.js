@@ -1,8 +1,12 @@
 import * as React from 'react'
-import {screen} from '@testing-library/react'
+import {
+  render,
+  screen,
+  waitForLoadingToFinish,
+  userEvent,
+} from 'test/app-test-utils'
 import {buildBook} from 'test/generate'
 import * as booksDB from 'test/data/books'
-import {render, userEvent, waitForLoadingToFinish} from 'test/app-test-utils'
 import {formatDate} from 'utils/misc'
 import {App} from 'app'
 
