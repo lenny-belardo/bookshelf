@@ -4,9 +4,11 @@ import {
   screen,
   waitForLoadingToFinish,
   userEvent,
+  loginAsUser,
 } from 'test/app-test-utils'
-import {buildBook} from 'test/generate'
+import {buildBook, buildListItem} from 'test/generate'
 import * as booksDB from 'test/data/books'
+import * as listItemsDB from 'test/data/list-items'
 import {formatDate} from 'utils/misc'
 import {App} from 'app'
 
@@ -72,4 +74,21 @@ test('can create a list item for the book', async () => {
     screen.queryByRole('button', {name: /mark as unread/i}),
   ).not.toBeInTheDocument()
   expect(screen.queryByRole('radio', {name: /star/i})).not.toBeInTheDocument()
+})
+
+test('can remove a list item for the book', async () => {
+  const book = await booksDB.create(buildBook())
+  const route = `/book/${book.id}`
+  const user = await loginAsUser()
+
+  await listItemsDB.create(buildListItem({owner: user, book}))
+
+  await render(<App />, {route, user})
+
+  expect(screen.getByRole('button', {name: /Remove from list/i})).toBeInTheDocument()
+
+  await userEvent.click(screen.getByRole('button', {name: /Remove from list/i}))
+
+  expect(screen.queryByRole('button', {name: /Remove from list/i})).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', {name: /Add to list/i})).toBeInTheDocument()
 })
