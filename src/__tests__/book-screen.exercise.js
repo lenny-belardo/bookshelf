@@ -119,6 +119,7 @@ test('can mark a list item as read', async () => {
 })
 
 test('can edit a note', async () => {
+  jest.useFakeTimers()
   const book = await booksDB.create(buildBook())
   const route = `/book/${book.id}`
   const user = await loginAsUser()
@@ -137,6 +138,7 @@ test('can edit a note', async () => {
   userEvent.type(notesTextarea, newNotes)
 
   await screen.findByLabelText(/loading/i)
+  await waitForLoadingToFinish()
 
   await waitFor(() => expect(notesTextarea).toHaveValue(newNotes))
 

@@ -22,3 +22,7 @@ afterEach(async () => {
     listItemsDB.reset(),
   ])
 })
+
+beforeEach(() => {
+  jest.useRealTimers()
+})
