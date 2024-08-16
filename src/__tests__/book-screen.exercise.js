@@ -2,10 +2,12 @@ import * as React from 'react'
 import {
   render,
   screen,
+  waitFor,
   waitForLoadingToFinish,
   userEvent,
   loginAsUser,
 } from 'test/app-test-utils'
+import faker from 'faker'
 import {buildBook, buildListItem} from 'test/generate'
 import * as booksDB from 'test/data/books'
 import * as listItemsDB from 'test/data/list-items'
@@ -114,4 +116,31 @@ test('can mark a list item as read', async () => {
   expect(screen.getByRole('button', {name: /mark as unread/i})).toBeInTheDocument()
   expect(screen.getByRole('button', {name: /remove from list/i})).toBeInTheDocument()
   expect(screen.getByLabelText(/start and finish date/i)).toHaveTextContent(`${formatDate(listItem.startDate)} — ${formatDate(Date.now())}`)
+})
+
+test('can edit a note', async () => {
+  const book = await booksDB.create(buildBook())
+  const route = `/book/${book.id}`
+  const user = await loginAsUser()
+
+  const listItem = await listItemsDB.create(buildListItem({owner: user, book}))
+
+  await render(<App />, {route, user})
+
+  const newNotes = faker.lorem.words()
+  const notesTextarea = screen.getByRole('textbox', {name: /notes/i})
+
+  expect(notesTextarea).toBeInTheDocument()
+  expect(notesTextarea).toHaveValue(listItem.notes)
+
+  userEvent.clear(notesTextarea)
+  userEvent.type(notesTextarea, newNotes)
+
+  await screen.findByLabelText(/loading/i)
+
+  await waitFor(() => expect(notesTextarea).toHaveValue(newNotes))
+
+  expect(await listItemsDB.read(listItem.id)).toMatchObject({
+    notes: newNotes
+  })
 })
