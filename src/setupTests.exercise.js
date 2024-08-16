@@ -7,6 +7,8 @@ import * as usersDB from 'test/data/users'
 import * as listItemsDB from 'test/data/list-items'
 import * as booksDB from 'test/data/books'
 
+jest.mock('components/profiler')
+
 // enable API mocking in test runs using the same request handlers
 // as for the client-side mocking.
 beforeAll(() => server.listen())
