@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
+import {act, waitFor} from '@testing-library/react'
 import {queryCache} from 'react-query'
 import * as auth from 'auth-provider'
 import {server} from 'test/server'
@@ -23,6 +24,9 @@ afterEach(async () => {
   ])
 })
 
-beforeEach(() => {
-  jest.useRealTimers()
-})
+beforeEach(async () => {
+  await waitFor(() => expect(queryCache.isFetching).toBe(0))
+  if (jest.isMockFunction(setTimeout)) {
+    act(() => jest.runOnlyPendingTimers())
+    jest.useRealTimers()
+  }})

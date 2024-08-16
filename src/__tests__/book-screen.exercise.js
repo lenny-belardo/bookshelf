@@ -2,7 +2,6 @@ import * as React from 'react'
 import {
   render,
   screen,
-  waitFor,
   waitForLoadingToFinish,
   userEvent,
   loginAsUser,
@@ -13,6 +12,8 @@ import * as booksDB from 'test/data/books'
 import * as listItemsDB from 'test/data/list-items'
 import {formatDate} from 'utils/misc'
 import {App} from 'app'
+
+const fakeTimerUserEvent = userEvent.setup({ advanceTimers: () => jest.runOnlyPendingTimers(), })
 
 test('renders all the book information', async () => {
   const book = await booksDB.create(buildBook())
@@ -134,13 +135,13 @@ test('can edit a note', async () => {
   expect(notesTextarea).toBeInTheDocument()
   expect(notesTextarea).toHaveValue(listItem.notes)
 
-  userEvent.clear(notesTextarea)
-  userEvent.type(notesTextarea, newNotes)
+  fakeTimerUserEvent.clear(notesTextarea)
+  fakeTimerUserEvent.type(notesTextarea, newNotes)
 
   await screen.findByLabelText(/loading/i)
   await waitForLoadingToFinish()
 
-  await waitFor(() => expect(notesTextarea).toHaveValue(newNotes))
+  expect(notesTextarea).toHaveValue(newNotes)
 
   expect(await listItemsDB.read(listItem.id)).toMatchObject({
     notes: newNotes
