@@ -165,22 +165,32 @@ test('can edit a note', async () => {
   })
 })
 
-test('shows an error message when the book fails to load', async () => {
-  const nonExistentBook = {
-    title: 'Voice of War',
-    author: 'Zack Argyle',
-    coverImageUrl:
-      'https://images-na.ssl-images-amazon.com/images/I/41JodZ5Vl%2BL.jpg',
-    id: 'B084F96GFZ1',
-    pageCount: 372,
-    publisher: 'Self Published',
-    synopsis:
-      "Chrys Valerian is a threadweaver, a high general, and soon-to-be father. But to the people of Alchea, he is the Apogee—the man who won the war.\n\nWhen a stranger's prophecy foretells danger to Chrys' child, he must do everything in his power to protect his family—even if the most dangerous enemy is the voice in his own head.\n\nTo the west, a sheltered girl seeks to find her place in the world.\n\nTo the south, a young man's life changes after he dies.\n\nTogether, they will change the world—whether they intend to or not.",
-  }
+describe('console errors', () => {
+  beforeAll(() => {
+    jest.spyOn(console, 'error')
+  })
 
-  await renderBookScreen({book: nonExistentBook, listItem: null})
+  afterAll(() => {
+    console.error.mockRestore()
+  })
 
-  expect((await screen.getByRole('alert')).textContent).toMatchInlineSnapshot(
-    `"There was an error: Book not found"`,
-  )
+  test('shows an error message when the book fails to load', async () => {
+    const nonExistentBook = {
+      title: 'Voice of War',
+      author: 'Zack Argyle',
+      coverImageUrl:
+        'https://images-na.ssl-images-amazon.com/images/I/41JodZ5Vl%2BL.jpg',
+      id: 'B084F96GFZ1',
+      pageCount: 372,
+      publisher: 'Self Published',
+      synopsis:
+        "Chrys Valerian is a threadweaver, a high general, and soon-to-be father. But to the people of Alchea, he is the Apogee—the man who won the war.\n\nWhen a stranger's prophecy foretells danger to Chrys' child, he must do everything in his power to protect his family—even if the most dangerous enemy is the voice in his own head.\n\nTo the west, a sheltered girl seeks to find her place in the world.\n\nTo the south, a young man's life changes after he dies.\n\nTogether, they will change the world—whether they intend to or not.",
+    }
+  
+    await renderBookScreen({book: nonExistentBook, listItem: null})
+  
+    expect((await screen.getByRole('alert')).textContent).toMatchInlineSnapshot(
+      `"There was an error: Book not found"`,
+    )
+  })
 })
