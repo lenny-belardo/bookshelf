@@ -7,6 +7,7 @@ import {
   loginAsUser,
 } from 'test/app-test-utils'
 import faker from 'faker'
+import {server, rest} from 'test/server'
 import {buildBook, buildListItem} from 'test/generate'
 import * as booksDB from 'test/data/books'
 import * as listItemsDB from 'test/data/list-items'
@@ -167,7 +168,7 @@ test('can edit a note', async () => {
 
 describe('console errors', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'error')
+    jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterAll(() => {
@@ -186,11 +187,49 @@ describe('console errors', () => {
       synopsis:
         "Chrys Valerian is a threadweaver, a high general, and soon-to-be father. But to the people of Alchea, he is the Apogee—the man who won the war.\n\nWhen a stranger's prophecy foretells danger to Chrys' child, he must do everything in his power to protect his family—even if the most dangerous enemy is the voice in his own head.\n\nTo the west, a sheltered girl seeks to find her place in the world.\n\nTo the south, a young man's life changes after he dies.\n\nTogether, they will change the world—whether they intend to or not.",
     }
-  
+
     await renderBookScreen({book: nonExistentBook, listItem: null})
-  
+
     expect((await screen.getByRole('alert')).textContent).toMatchInlineSnapshot(
       `"There was an error: Book not found"`,
     )
+  })
+
+  test('note update failures are displayed', async () => {
+    // using fake timers to skip debounce time
+    jest.useFakeTimers()
+    const {listItem} = await renderBookScreen()
+  
+    const newNotes = faker.lorem.words()
+    const notesTextarea = screen.getByRole('textbox', {name: /notes/i})
+  
+    const apiURL = process.env.REACT_APP_API_URL
+  
+    const testErrorMessage = '__test_error_message__'
+    server.use(
+      rest.put(`${apiURL}/list-items/:listItemId`, async (req, res, ctx) => {
+        return res(
+          ctx.status(400),
+          ctx.json({status: 400, message: testErrorMessage}),
+        )
+      }),
+    )
+  
+    await fakeTimerUserEvent.clear(notesTextarea)
+    await fakeTimerUserEvent.type(notesTextarea, newNotes)
+  
+    // wait for the loading spinner to show up
+    await screen.findByLabelText(/loading/i)
+    // wait for the loading spinner to go away
+    await waitForLoadingToFinish()
+  
+    expect(notesTextarea).toHaveValue(newNotes)
+  
+    expect(await screen.getByRole('alert').textContent).toMatchInlineSnapshot(
+      `"There was an error: __test_error_message__"`,
+    )
+    expect(await listItemsDB.read(listItem.id)).not.toMatchObject({
+      notes: newNotes,
+    })
   })
 })
