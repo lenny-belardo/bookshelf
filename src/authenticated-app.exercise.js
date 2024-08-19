@@ -157,5 +157,4 @@ function AppRoutes() {
   )
 }
 
-// 🐨 change this to a default export
 export default AuthenticatedApp
