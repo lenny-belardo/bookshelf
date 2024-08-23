@@ -5,11 +5,7 @@ import {UnauthenticatedApp} from './unauthenticated-app'
 
 function App() {
   const {user} = useAuth()
-  return user ? (
-    <AuthenticatedApp />
-  ) : (
-    <UnauthenticatedApp />
-  )
+  return user ? <AuthenticatedApp /> : <UnauthenticatedApp />
 }
 
 export {App}
