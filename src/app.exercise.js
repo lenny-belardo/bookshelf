@@ -6,17 +6,12 @@ import {UnauthenticatedApp} from './unauthenticated-app'
 
 function App() {
   const {user} = useAuth()
-
-  return (
-    <>
-      {user ? (
-        <Router>
-          <AuthenticatedApp />
-        </Router>
-      ) : (
-        <UnauthenticatedApp />
-      )}
-    </>
+  return user ? (
+    <Router>
+      <AuthenticatedApp />
+    </Router>
+  ) : (
+    <UnauthenticatedApp />
   )
 }
 
