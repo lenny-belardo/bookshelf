@@ -1,6 +1,6 @@
 import {useQuery, useMutation, queryCache} from 'react-query'
-import {client} from './api-client'
 import {setQueryDataForBook} from './books'
+import {client} from './api-client'
 
 function useListItems(user) {
   const {data: listItems} = useQuery({
@@ -12,8 +12,8 @@ function useListItems(user) {
         for (const listItem of listItems) {
           setQueryDataForBook(listItem.book)
         }
-      }
-    }
+      },
+    },
   })
   return listItems ?? []
 }
