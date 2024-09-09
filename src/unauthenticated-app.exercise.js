@@ -75,7 +75,7 @@ function LoginForm({onSubmit, submitButton}) {
 const circleDismissButton = (
   <div css={{display: 'flex', justifyContent: 'flex-end'}}>
     <ModalDismissButton>
-      <CircleButton onClick={() => console.log("asdsd")}>
+      <CircleButton>
         <VisuallyHidden>Close</VisuallyHidden>
         <span aria-hidden>×</span>
       </CircleButton>
@@ -107,7 +107,7 @@ function UnauthenticatedApp() {
       >
         <Modal>
           <ModalOpenButton>
-            <Button variant="primary" onClick={() => console.log("asds00000d")}>Login</Button>
+            <Button variant="primary">Login</Button>
           </ModalOpenButton>
           <ModalContents aria-label="Login form">
             {circleDismissButton}
