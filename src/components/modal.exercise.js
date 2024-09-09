@@ -1,3 +1,6 @@
+/** @jsx jsx */
+import {jsx} from '@emotion/core'
+
 import * as React from 'react'
 import {Dialog} from './lib'
 
@@ -11,19 +14,23 @@ function Modal(props) {
 
 function ModalDismissButton({children: child}) {
   const [, setIsOpen] = React.useContext(ModalContext)
-  return React.cloneElement(child, {onClick: () => setIsOpen(false)})
+  return React.cloneElement(child, {
+    onClick: () => setIsOpen(false),
+  })
 }
 
 function ModalOpenButton({children: child}) {
   const [, setIsOpen] = React.useContext(ModalContext)
-  return React.cloneElement(child, {onClick: () => setIsOpen(true)})
+  return React.cloneElement(child, {
+    onClick: () => setIsOpen(true),
+  })
 }
 
 function ModalContents(props) {
   const [isOpen, setIsOpen] = React.useContext(ModalContext)
   return (
-    <Dialog isOpen={isOpen} onDismiss={()=> setIsOpen(false)} {...props}/>
+    <Dialog isOpen={isOpen} onDismiss={() => setIsOpen(false)} {...props} />
   )
 }
 
-export {Modal, ModalContents, ModalDismissButton, ModalOpenButton}
+export {Modal, ModalDismissButton, ModalOpenButton, ModalContents}

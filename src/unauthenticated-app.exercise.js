@@ -9,9 +9,14 @@ import {
   Button,
   Spinner,
   FormGroup,
-  ErrorMessage
+  ErrorMessage,
 } from './components/lib'
-import {Modal, ModalContents, ModalDismissButton, ModalOpenButton} from './components/modal'
+import {
+  Modal,
+  ModalDismissButton,
+  ModalContents,
+  ModalOpenButton,
+} from './components/modal'
 import {Logo} from './components/logo'
 import {useAuth} from './context/auth-context'
 import {useAsync} from './utils/hooks'
@@ -69,10 +74,12 @@ function LoginForm({onSubmit, submitButton}) {
 
 const circleDismissButton = (
   <div css={{display: 'flex', justifyContent: 'flex-end'}}>
-    <CircleButton>
-      <VisuallyHidden>Close</VisuallyHidden>
-      <span aria-hidden>×</span>
-    </CircleButton>
+    <ModalDismissButton>
+      <CircleButton>
+        <VisuallyHidden>Close</VisuallyHidden>
+        <span aria-hidden>×</span>
+      </CircleButton>
+    </ModalDismissButton>
   </div>
 )
 
@@ -102,27 +109,26 @@ function UnauthenticatedApp() {
           <ModalOpenButton>
             <Button variant="primary">Login</Button>
           </ModalOpenButton>
-          <ModalContents>
-            <ModalDismissButton>
-              {circleDismissButton}
-            </ModalDismissButton>
-
+          <ModalContents aria-label="Login form">
+            {circleDismissButton}
             <h3 css={{textAlign: 'center', fontSize: '2em'}}>Login</h3>
-            <LoginForm onSubmit={login} submitButton={<Button variant="primary">Login</Button>} />
+            <LoginForm
+              onSubmit={login}
+              submitButton={<Button variant="primary">Login</Button>}
+            />
           </ModalContents>
         </Modal>
-
         <Modal>
           <ModalOpenButton>
             <Button variant="secondary">Register</Button>
           </ModalOpenButton>
-          <ModalContents>
-            <ModalDismissButton>
-              {circleDismissButton}
-            </ModalDismissButton>
-
+          <ModalContents aria-label="Registration form">
+            {circleDismissButton}
             <h3 css={{textAlign: 'center', fontSize: '2em'}}>Register</h3>
-            <LoginForm onSubmit={register} submitButton={<Button variant="secondary">Register</Button>} />
+            <LoginForm
+              onSubmit={register}
+              submitButton={<Button variant="secondary">Register</Button>}
+            />
           </ModalContents>
         </Modal>
       </div>
